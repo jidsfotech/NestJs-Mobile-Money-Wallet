@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  beneficiary:    
+    container_name: wallets
+    image: wallets
+    build: .
+    volumes:
+      - .:/src
+    networks:
+      - main_network
+
+  database:
+    container_name: wallets_db
+    image: mysql:5.7
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    ports:
+        - "3306"
+    environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        MYSQL_USER: "wallets_user"
+        MYSQL_PASSWORD: "wallets_pass"
+        MYSQL_DATABASE: "WALLETS"
+    networks:
+        - main_network
+
+  # redis:
+  #     container_name: wallets
+  #     image: redis
+  #     ports:
+  #         - "6379"
+  #     networks:
+  #         - main_network
+
+networks:
+  main_network:
+    driver: bridge
